@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 struct msg_buffer1 {
 	long int msg_type;
@@ -15,6 +18,10 @@ struct msg_buffer2 {
 
 int main()
 {
+	mkfifo("msgq1", 0777);
+	mkfifo("msgq2", 0777);
+	mkfifo("msgq3", 0777);
+	
 	key_t key;
 	int msg_id;
 	
@@ -62,6 +69,10 @@ int main()
 	}
 	
 	msgctl(msg_id1, IPC_RMID, NULL);
+	
+	unlink("msgq1");
+	unlink("msgq2");
+	unlink("msgq3");
 	
 	return 0;
 }
